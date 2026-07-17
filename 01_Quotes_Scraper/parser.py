@@ -2,6 +2,7 @@
 PARSER WHICH PARSE THE HTML AND EXCTRACT THE REQUIRED DATA
 """
 
+from urllib.parse import urljoin
 from bs4 import BeautifulSoup
 from logger import logger
 
@@ -48,7 +49,7 @@ def extract_quote(quote):
         
         logger.info("Quote Extraction Successfully !")
         
-        return quote_text.text.strip().capitalize()
+        return quote_text.text.strip()
     
     except Exception as e:
         logger.error(f"Exctraction Failed | {e}")
@@ -70,7 +71,7 @@ def extract_author(quote):
 
         logger.info("Auhtor Extraction Successfully !")
         
-        return author_name.text.strip().capitalize()
+        return author_name.text.strip().title()
 
     except Exception as e:
         
@@ -86,9 +87,7 @@ def extract_tags(quote):
         _LIST_: _A LIST OF ALL THE ALL THE TAGS OF THAT QUOTE_
     """
     
-    tags = [
-        
-    ]
+    tags = []
     
     try:
         
@@ -109,7 +108,33 @@ def extract_tags(quote):
         raise
     
 
-def extract_all_quotes(quotes):
+
+def extract_next_page(soup , current_url):
+    
+    """_EXTRACTING NEXT PAGE URL_
+
+    Returns:
+        _PAGE URL_: _NEXT PAGE URL FOR PAGINATION_
+    """
+    try:
+       
+        logger.info("Next Page URL Extracting...")
+        
+        url_tag = soup.select_one(".next>a[href]")
+        
+        logger.info("Next Page URL Extracted !")
+        
+        if not url_tag:
+            return None
+        
+        return urljoin(current_url,url_tag.get("href"))
+    
+    except Exception as e:
+        logger.error(f"Next Page URL Extraction Failed | {e}")
+        raise
+    
+    
+def extract_all_quotes(soup):
     
     
     """_EXTRACT ALL THE QUOTES_
@@ -117,13 +142,13 @@ def extract_all_quotes(quotes):
     Returns:
         _LIST_: _A LIST OF DICTIONARIES WHICH CONTAIN QUOTES_
     """
-    quotes_list = [
-        
-    ]
+    
+    quotes = soup.select(".quote")
+    quotes_list = []
     
     try:
         
-        logger.info("Extractnig All Quotes...")
+        logger.info("Extracting All Quotes...")
         
         for quote in quotes:
             
