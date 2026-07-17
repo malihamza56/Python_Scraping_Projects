@@ -8,9 +8,13 @@ The scraper automatically handles pagination, exports data into multiple formats
 ## 📸 Preview
 
 ![Quotes Scraper](images/preview1.png)
+<hr>
 ![Quotes Scraper](images/preview2.png)
+<hr>
 ![Quotes Scraper](images/preview3.png)
+<hr>
 ![Quotes Scraper](images/preview4.png)
+<hr>
 
 ## 🚀 Features
 
